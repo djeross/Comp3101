@@ -6,3 +6,5 @@ Built as a final project for COMP3101 (Operating Systems)
  - Theodore Bennett
  - Dexter Small
  - Nazhon Robinson
+ - Rodje Ross
+ - Dahalia Howell
