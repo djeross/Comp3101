@@ -7,6 +7,7 @@ window.onload = function() {
 function main() {
 }
 
+
 // Shortest Job Next Scheduling
 function sjn_scheduling() {
   var processes = []; 
@@ -17,8 +18,8 @@ function sjn_scheduling() {
     e.preventDefault();
   
     var pid = document.getElementById("pid").value;
-    var arrival_time = document.getElementById("a-time").value;
-    var burst_time = document.getElementById("b-time").value;
+    var arrival_time = Number(document.getElementById("a-time").value);
+    var burst_time = Number(document.getElementById("b-time").value);
 
     let process = {id: pid, arrival_time: arrival_time, burst_time: burst_time};
     processes.push(process);
@@ -31,7 +32,48 @@ function sjn_scheduling() {
 
   gantt_btn.addEventListener("click", function(e){
     e.preventDefault();
-    
+    enter_btn.disabled = true;
+    var time = 0; //may end up being loop variable idk yet
+    var end = 0;
+    var queue = [];
+    var executed = [];
+
+    while (executed.length != processes.length) {
+
+      for (let i = 0; i < processes.length; i++) {
+        if (processes[i].arrival_time === time) {
+          queue.push(processes[i]);
+        }
+      }
+
+      console.log(time + ": " + queue + "before\n");
+
+      var burst_times = [];
+
+      for (let i = 0; i < queue.length; i++) {
+        burst_times.push(queue[i].burst_time);
+      }
+
+      var next = burst_times.indexOf(Math.min.apply(null, burst_times));
+
+      if (next === -1) {
+        continue;
+      }
+
+      if (time === end) {
+        end += queue[next].burst_time;
+
+        executed.push(queue[next]);
+        queue.splice(next, 1);
+        
+        console.log(time + ": " + executed + "\n");
+        console.log(time + ": " + queue + "after\n\n\n");
+      }
+
+      time += 1;
+
+    }
+
   });
 
 }
