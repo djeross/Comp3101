@@ -6,9 +6,6 @@ window.onload = function() {
 
 function main() {
 }
-/*
-seems to be working fine but when you try to add a process to the queue it becomes an unidentified object
-*/
 
 // Shortest Job Next Scheduling
 function sjn_scheduling() {
@@ -25,21 +22,22 @@ function sjn_scheduling() {
 
     let process = {id: pid, arrival_time: arrival_time, burst_time: burst_time};
     processes.push(process);
-    console.log(process);
 
     document.getElementById("sjn-form").reset();
-    console.log(processes);
 
   });
 
   gantt_btn.addEventListener("click", function(e){
     e.preventDefault();
+
     enter_btn.disabled = true;
     var time = 0;
     var end = 0;
     var queue = [];
     var executed = [];
+    var burst_times;
 
+    // beginning of implementation
     while (executed.length != processes.length) {
 
       for (let i = 0; i < processes.length; i++) {
@@ -48,7 +46,7 @@ function sjn_scheduling() {
         }
       }
 
-      var burst_times = [];
+      burst_times = [];
 
       for (let i = 0; i < queue.length; i++) {
         burst_times.push(queue[i].burst_time);
@@ -63,6 +61,10 @@ function sjn_scheduling() {
       if (time === end) {
         end += queue[next].burst_time;
 
+        queue[next]["completion_time"] = end;
+        queue[next]["turnaround_time"] = queue[next].completion_time - queue[next].arrival_time;
+        queue[next]["waiting_time"] = queue[next].turnaround_time - queue[next].burst_time;
+
         executed.push(queue[next]);
         queue.splice(next, 1);
         
@@ -70,10 +72,13 @@ function sjn_scheduling() {
 
       time += 1;
 
-    }
+    } // end of implementation
 
     for (let i = 0; i < executed.length; i++) {
-      console.log(executed[i].id)
+      console.log("id: " + executed[i].id);
+      console.log("ct: " + executed[i].completion_time);
+      console.log("tat: " + executed[i].turnaround_time);
+      console.log("wt: " + executed[i].waiting_time + "\n\n\n");
     }
 
   });
