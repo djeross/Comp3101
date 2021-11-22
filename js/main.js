@@ -6,7 +6,9 @@ window.onload = function() {
 
 function main() {
 }
-
+/*
+seems to be working fine but when you try to add a process to the queue it becomes an unidentified object
+*/
 
 // Shortest Job Next Scheduling
 function sjn_scheduling() {
@@ -33,7 +35,7 @@ function sjn_scheduling() {
   gantt_btn.addEventListener("click", function(e){
     e.preventDefault();
     enter_btn.disabled = true;
-    var time = 0; //may end up being loop variable idk yet
+    var time = 0;
     var end = 0;
     var queue = [];
     var executed = [];
@@ -45,8 +47,6 @@ function sjn_scheduling() {
           queue.push(processes[i]);
         }
       }
-
-      console.log(time + ": " + queue + "before\n");
 
       var burst_times = [];
 
@@ -66,12 +66,14 @@ function sjn_scheduling() {
         executed.push(queue[next]);
         queue.splice(next, 1);
         
-        console.log(time + ": " + executed + "\n");
-        console.log(time + ": " + queue + "after\n\n\n");
       }
 
       time += 1;
 
+    }
+
+    for (let i = 0; i < executed.length; i++) {
+      console.log(executed[i].id)
     }
 
   });
