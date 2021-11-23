@@ -5,13 +5,14 @@ window.onload = function() {
 }
 
 function main() {
+
 }
 
 // Shortest Job Next Scheduling
 function sjn_scheduling() {
   var processes = []; 
-  const enter_btn = document.getElementById("enter-btn");
-  const gantt_btn = document.getElementById("gantt-btn");
+  const enter_btn = document.getElementById("sjf-enter-btn");
+  const gantt_btn = document.getElementById("sjf-gantt-btn");
 
   enter_btn.addEventListener("click", function(e){
     e.preventDefault();
@@ -24,6 +25,7 @@ function sjn_scheduling() {
     processes.push(process);
 
     document.getElementById("sjn-form").reset();
+
 
   });
 
@@ -81,14 +83,6 @@ function sjn_scheduling() {
       time += 1;
 
     } // end of implementation
-
-    for (let i = 0; i < executed.length; i++) {
-      console.log("id: " + executed[i].id);
-      console.log("start: " + executed[i].start);
-      console.log("ct: " + executed[i].completion_time);
-      console.log("tat: " + executed[i].turnaround_time);
-      console.log("wt: " + executed[i].waiting_time + "\n\n\n");
-    }
 
     generate_spn_chart(executed);
     generate_spn_table(executed);
@@ -188,30 +182,28 @@ function generate_spn_form() {
   div.innerHTML = `
         <h1>Shortest Job Next Scheduling</h1>
         <div class="d-flex flex-row container gap-4">
-          <div id="sjn-input" class="container bg-light p-5">
+          <div id="sjn-input" class="container bg-light p-5 rounded-3 shadow-sm">
             <form id="sjn-form" action="" method="post">
               <h3>Input Values</h3>
-              <div class="form-field">
+              <div class="form-group mt-2">
                   <label for="pid">Process ID:</label><br>
-                  <input type="text" name="pid" id="pid" placeholder="Enter process ID">
+                  <input type="text" class="form-control" name="pid" id="pid" placeholder="Enter process ID">
               </div>
-              <div class="form-field">
+              <div class="form-group mt-2">
                   <label for="a-time">Arrival Time:</label><br>
-                  <input type="text" name="a-time" id="a-time" placeholder="Enter arrival time">
+                  <input type="text" class="form-control" name="a-time" id="a-time" placeholder="Enter arrival time">
               </div>
-              <div class="form-field">
+              <div class="form-group mt-2">
                   <label for="b-time">Burst Time:</label><br>
-                  <input type="text" name="b-time" id="b-time" placeholder="Enter burst time">
+                  <input type="text" class="form-control" name="b-time" id="b-time" placeholder="Enter burst time">
               </div>
-              <div>
-                  <button type="submit" class="btn" id="enter-btn">Enter values</button>
-              </div>
-              <div>
-                  <button type="submit" class="btn" id="gantt-btn">Show Results</button>
+              <div class="d-flex flex-row gap-2 mt-3">
+                  <button type="submit" class="btn btn-primary" id="sjf-enter-btn">Enter values</button>
+                  <button type="submit" class="btn btn-primary" id="sjf-gantt-btn">Show Results</button>
               </div>
             </form>
           </div>
-          <div id="output" class="container bg-light p-5">
+          <div id="output" class="container bg-light p-5 rounded-3 shadow-sm">
             <h3>Output</h3>
             <div id="sjn-chart"></div>
             <div id="sjn-table-div">Gantt chart and table will be shown here</div>
