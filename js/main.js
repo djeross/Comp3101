@@ -13,19 +13,42 @@ function sjn_scheduling() {
   var processes = []; 
   const enter_btn = document.getElementById("sjf-enter-btn");
   const gantt_btn = document.getElementById("sjf-gantt-btn");
+  const table_div = document.getElementById("sjn-table-div");
+  var id_track = 1;
 
   enter_btn.addEventListener("click", function(e){
     e.preventDefault();
   
-    var pid = document.getElementById("pid").value;
     var arrival_time = Number(document.getElementById("a-time").value);
     var burst_time = Number(document.getElementById("b-time").value);
 
-    let process = {id: pid, arrival_time: arrival_time, burst_time: burst_time};
+    let process = {id: id_track, arrival_time: arrival_time, burst_time: burst_time};
+    id_track += 1;
     processes.push(process);
 
     document.getElementById("sjn-form").reset();
 
+    var table = `
+    <table id="sjn-table" class="table table-bordered">
+    <tr>
+      <th scope="col">PID</th>
+      <th scope="col">Arrival Time</th>
+      <th scope="col">Burst Time</th>
+    </tr>
+  `;
+
+  for (let i = 0; i < processes.length; i++) {
+    table += `
+      <tr>
+        <td>${processes[i].id}</td>
+        <td>${processes[i].arrival_time}</td>
+        <td>${processes[i].burst_time}</td>
+      </tr>
+    `;
+  }
+
+  table += `</table>`;
+  table_div.innerHTML = table;
 
   });
 
@@ -186,10 +209,6 @@ function generate_spn_form() {
             <form id="sjn-form" action="" method="post">
               <h3>Input Values</h3>
               <div class="form-group mt-2">
-                  <label for="pid">Process ID:</label><br>
-                  <input type="text" class="form-control" name="pid" id="pid" placeholder="Enter process ID">
-              </div>
-              <div class="form-group mt-2">
                   <label for="a-time">Arrival Time:</label><br>
                   <input type="text" class="form-control" name="a-time" id="a-time" placeholder="Enter arrival time">
               </div>
@@ -204,9 +223,9 @@ function generate_spn_form() {
             </form>
           </div>
           <div id="output" class="container bg-light p-5 rounded-3 shadow-sm">
-            <h3>Output</h3>
+            <h3>Results</h3>
             <div id="sjn-chart"></div>
-            <div id="sjn-table-div">Gantt chart and table will be shown here</div>
+            <div id="sjn-table-div">The results will appear here.</div>
           </div>
         </div>
   `;
