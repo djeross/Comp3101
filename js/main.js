@@ -29,23 +29,24 @@ function sjn_scheduling() {
     document.getElementById("sjn-form").reset();
 
     var table = `
-    <table id="sjn-table" class="table table-bordered">
-    <tr>
-      <th scope="col">PID</th>
-      <th scope="col">Arrival Time</th>
-      <th scope="col">Burst Time</th>
-    </tr>
-  `;
-
-  for (let i = 0; i < processes.length; i++) {
-    table += `
+      <br>
+      <table id="sjn-table" class="table table-bordered">
       <tr>
-        <td>${processes[i].id}</td>
-        <td>${processes[i].arrival_time}</td>
-        <td>${processes[i].burst_time}</td>
+        <th scope="col">PID</th>
+        <th scope="col">Arrival Time</th>
+        <th scope="col">Burst Time</th>
       </tr>
     `;
-  }
+
+    for (let i = 0; i < processes.length; i++) {
+      table += `
+        <tr>
+          <td>${processes[i].id}</td>
+          <td>${processes[i].arrival_time}</td>
+          <td>${processes[i].burst_time}</td>
+        </tr>
+      `;
+    }
 
   table += `</table>`;
   table_div.innerHTML = table;
@@ -157,6 +158,7 @@ function generate_spn_table(processes) {
   var avg_wt = 0;
   var avg_tat = 0;
   var table = `
+    <br>
     <table id="sjn-table" class="table table-bordered">
     <tr>
       <th scope="col">PID</th>
