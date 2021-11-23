@@ -182,7 +182,7 @@ function generate_spn_form() {
   div.innerHTML = `
         <h1>Shortest Job Next Scheduling</h1>
         <div class="d-flex flex-row container gap-4">
-          <div id="sjn-input" class="container bg-light p-5 rounded-3 shadow-sm">
+          <div id="sjn-input" class="container bg-light p-5 rounded-3 shadow-sm w-50 h-50">
             <form id="sjn-form" action="" method="post">
               <h3>Input Values</h3>
               <div class="form-group mt-2">
