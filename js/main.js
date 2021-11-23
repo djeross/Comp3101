@@ -137,15 +137,17 @@ function generate_spn_chart(processes) {
 }
 
 function generate_spn_table(processes) {
+  var avg_wt = 0;
+  var avg_tat = 0;
   var table = `
-    <table>
+    <table id="sjn-table" class="table table-bordered">
     <tr>
-      <th>PID</th>
-      <th>Arrival Time</th>
-      <th>Burst Time</th>
-      <th>Completion Time</th>
-      <th>Turnaround Time</th>
-      <th>Waiting Time</th>
+      <th scope="col">PID</th>
+      <th scope="col">Arrival Time</th>
+      <th scope="col">Burst Time</th>
+      <th scope="col">Completion Time</th>
+      <th scope="col">Turnaround Time</th>
+      <th scope="col">Waiting Time</th>
     </tr>
   `;
 
@@ -160,11 +162,23 @@ function generate_spn_table(processes) {
         <td>${processes[i].waiting_time}</td>
       </tr>
     `;
+    avg_wt += processes[i].waiting_time;
+    avg_tat += processes[i].turnaround_time;
   }
 
-  table += `</table>`;
+  avg_wt /= processes.length;
+  avg_tat /= processes.length;
 
-  var div = document.getElementById('sjn-table');
+  table += `
+        <tr>
+          <td colspan="4" style="text-align: right">Average</td>
+          <td>${avg_tat}</td>
+          <td>${avg_wt}</td>
+        </tr>
+      </table>
+  `;
+
+  var div = document.getElementById('sjn-table-div');
   div.innerHTML = table;
 }
 
@@ -172,9 +186,11 @@ function generate_spn_form() {
   var div = document.getElementsByClassName("main")[0];
 
   div.innerHTML = `
-          <div id="sjn-input">
+        <h1>Shortest Job Next Scheduling</h1>
+        <div class="d-flex flex-row container gap-4">
+          <div id="sjn-input" class="container bg-light p-5">
             <form id="sjn-form" action="" method="post">
-              <h1>Shortest Job Next Scheduling</h1>
+              <h3>Input Values</h3>
               <div class="form-field">
                   <label for="pid">Process ID:</label><br>
                   <input type="text" name="pid" id="pid" placeholder="Enter process ID">
@@ -191,13 +207,15 @@ function generate_spn_form() {
                   <button type="submit" class="btn" id="enter-btn">Enter values</button>
               </div>
               <div>
-                  <button type="submit" class="btn" id="gantt-btn">Show Gantt Chart</button>
+                  <button type="submit" class="btn" id="gantt-btn">Show Results</button>
               </div>
             </form>
           </div>
-          <div id="output">
+          <div id="output" class="container bg-light p-5">
+            <h3>Output</h3>
             <div id="sjn-chart"></div>
-            <div id="sjn-table"></div>
+            <div id="sjn-table-div">Gantt chart and table will be shown here</div>
           </div>
+        </div>
   `;
 }
