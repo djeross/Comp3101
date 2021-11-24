@@ -9,11 +9,11 @@ function main() {
 }
 
 
-// Priority Scheduling
+// First Come First Serve Algorithm
 function fcfs() {
-  var process_ar = []; // store process objects
+  var process_ar = []; // stores array containing process attributes
 
-  // Handle adding new process
+  // Handles adding new process
   $('#add_process_form').on("submit", function(e) {
     e.preventDefault();
     const table_body = document.querySelector("tbody");
@@ -24,6 +24,7 @@ function fcfs() {
     let process = [p_name, arrival_time, burst_time];
     process_ar.push(process);
 
+    // Adds new process to table
     table_body.innerHTML += `
       <tr>
         <td>${process[0]}</td>
@@ -31,17 +32,19 @@ function fcfs() {
         <td>${process[2]}</td>
       </tr>`;
 
+    // Resets "add process" form
     $(this)[0].reset();
     return true;
   });
 
+  // Functionality to button which initiates simulation
   $('#simulate').click(function (e) {
     var total_processing_time = cal_total_processing_time();
     e.preventDefault();
     simulate(total_processing_time);
   });
 
-  // simulate processing
+  // simulates processing
   function simulate(total_processing_time) {
     var time = 0;
     var ready_queue_ar = [];
@@ -73,7 +76,7 @@ function fcfs() {
             current_process_con[0].style.left = '1155px';
             current_process_con[0].style.top = '150px';
 
-            // current_process_el[0].style.display = 'none';
+
             burst_time = parseInt(current_process[2]);
 
             ready_queue_ar = ready_queue_ar.filter((item) => item[0] !== current_process[0]);
@@ -85,7 +88,6 @@ function fcfs() {
       }
 
       if (time == total_processing_time + 2) { // end process
-        // remove_process_from_cpu(current_process_con)
         alert('Processing finished');
       }
 
@@ -96,7 +98,7 @@ function fcfs() {
     }
 
     setInterval(do_processing, 1500);
-  } // end simulate
+  } // ends simulation
 
   // returns process according to arrival time
   function get_process(current_second) {
@@ -107,22 +109,19 @@ function fcfs() {
         all_f_processes.push(f_process);
       }
     }
-    return all_f_processes; // return multiple, incase arrival time is the same
+    return all_f_processes; // returns array of processes with same arrival time
   }
 
 
 
   // animation to remove process from cpu
   function remove_process_from_cpu(current_process_con) {
-    // current_process_con[0].classList.remove('bg-primary');
-    // current_process_con[0].classList.add('bg-danger');
     current_process_con.animate({left: '2090px', top: '50px'}, 'slow', function() {
-      // current_process_con[0].style.display = 'none';
     });
 
   }
 
-  // sort queue by highest priority
+  // sort queue by lowest arrival time
   function sort_queue(ready_queue_ar, ready_queue_show) {
     ready_queue_ar.sort( function(a, b) {
       return a[1] - b[1];
@@ -143,7 +142,7 @@ function fcfs() {
     }
   }
 
-  // caculate total processing time
+  // caculates total processing time
   function cal_total_processing_time() {
     var total_time = 0;
     for (var i = 0; i < process_ar.length; i++) {
@@ -155,4 +154,4 @@ function fcfs() {
     }
     return total_time;
   }
-} // end priority_scheduling
+} // end of first come first serve algorithm
