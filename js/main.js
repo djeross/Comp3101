@@ -48,8 +48,8 @@ function sjn_scheduling() {
       `;
     }
 
-  table += `</table>`;
-  table_div.innerHTML = table;
+    table += `</table>`;
+    table_div.innerHTML = table;
 
   });
 
