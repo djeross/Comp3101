@@ -61,9 +61,6 @@ function sjn_scheduling() {
     var total_processing_time = cal_total_processing_time(processes);
     simulate(processes, total_processing_time);
 
-    //generate_spn_chart(executed);
-    //generate_spn_table(executed);
-
   });
 
 }
@@ -98,7 +95,7 @@ function simulate(processes, total_processing_time) {
   div.innerHTML = container;
 
   var time = 0;
-  var end = 0;
+  var end;
   var ready_queue_ar = [];
   var executed = [];
   var burst_time = 0;
@@ -106,22 +103,21 @@ function simulate(processes, total_processing_time) {
   var burst_times = [];
 
   function do_processing() {
-    console.log('processing...')
     var arrived_process = get_process(processes, time);
+    console.log(time)
     console.log(arrived_process)
 
     if (arrived_process.length != 0){
-      //console.log('here 1')
       ready_queue_ar.push(...arrived_process);
     }
 
     if (ready_queue_ar.length != 0) { // if ready queue has values then lets process
-      //console.log('here 2')
       sort_queue(ready_queue_ar, $("#ready_queue"))
       console.log("ready queue: " + ready_queue_ar[0].id)
       
 
       if (burst_time == 0) { // if cpu free then take the next process
+        console.log("done" + time)
 
         burst_times = [];
         for (let i = 0; i < ready_queue_ar.length; i++) {
@@ -136,6 +132,7 @@ function simulate(processes, total_processing_time) {
 
         if (executed.length === 0) {
           ready_queue_ar[next]["start"] = ready_queue_ar[next].arrival_time;
+          end = ready_queue_ar[next].arrival_time;
         } else {
           ready_queue_ar[next]["start"] = end;
         }
@@ -147,9 +144,6 @@ function simulate(processes, total_processing_time) {
         ready_queue_ar[next]["waiting_time"] = ready_queue_ar[next].turnaround_time - ready_queue_ar[next].burst_time;
 
         executed.push(ready_queue_ar[next]);
-        for (let i = 0; i < executed.length; i++) {
-          console.log("executed " + executed[i].id);
-        }
 
         var current_process_el = $(`#${current_process.id}`)
 
@@ -165,7 +159,7 @@ function simulate(processes, total_processing_time) {
           current_process_con[0].style.top = '150px';
 
 
-          burst_time = parseInt(current_process.burst_time);
+          burst_time = parseInt(current_process.burst_time) - 1;
 
           ready_queue_ar = ready_queue_ar.filter((item) => item.id !== current_process.id);
           console.log(ready_queue_ar);
@@ -175,7 +169,7 @@ function simulate(processes, total_processing_time) {
 
     }
 
-    if (time == total_processing_time + 2) { // end process
+    if (time == total_processing_time) { // end process
       //alert('Processing finished');
       generate_spn_chart(executed);
       generate_spn_table(executed);
@@ -236,33 +230,14 @@ function sort_queue(ready_queue_ar, ready_queue_show) {
 function cal_total_processing_time(process_ar) {
   var total_time = 0;
   for (var i = 0; i < process_ar.length; i++) {
-    var _process = process_ar[i];
-      total_time += parseInt(_process.arrival_time) + parseInt(_process.burst_time)
+    var p = process_ar[i];
+    if(total_time < parseInt(p.arrival_time)){
+      total_time = parseInt(p.arrival_time);
+    }
+    total_time += parseInt(p.burst_time);
   }
   return total_time;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function generate_spn_chart(processes) {
 
@@ -354,7 +329,7 @@ function generate_spn_form() {
   var div = document.getElementsByClassName("main")[0];
 
   div.innerHTML = `
-        <h1>Shortest Job Next Scheduling</h1>
+        <h1>Shortest Job Next Scheduling (Non-Preemptive)</h1>
         <div class="d-flex flex-row container gap-4">
           <div id="sjn-input" class="container bg-light p-5 rounded-3 shadow-sm w-50 h-50">
             <form id="sjn-form" action="" method="post">
