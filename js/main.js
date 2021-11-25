@@ -108,44 +108,49 @@ function simulate(processes, total_processing_time) {
   function do_processing() {
     console.log('processing...')
     var arrived_process = get_process(processes, time);
-    console.log(processes)
+    console.log(arrived_process)
 
     if (arrived_process.length != 0){
-      console.log('here 1')
+      //console.log('here 1')
       ready_queue_ar.push(...arrived_process);
     }
 
     if (ready_queue_ar.length != 0) { // if ready queue has values then lets process
-      console.log('here 2')
+      //console.log('here 2')
       sort_queue(ready_queue_ar, $("#ready_queue"))
       console.log("ready queue: " + ready_queue_ar[0].id)
-
-      for (let i = 0; i < ready_queue_ar.length; i++) {
-        burst_times.push(ready_queue_ar[i].burst_time);
-      }
-
-      var next = burst_times.indexOf(Math.min.apply(null, burst_times));
-
-      var current_process = ready_queue_ar[next];
-
-      if (executed.length === 0) {
-        ready_queue_ar[next]["start"] = ready_queue_ar[next].arrival_time;
-        
-      } else {
-        ready_queue_ar[next]["start"] = end;
-      }
-      
-      end += ready_queue_ar[next].burst_time;
-
-      ready_queue_ar[next]["completion_time"] = end;
-      ready_queue_ar[next]["turnaround_time"] = ready_queue_ar[next].completion_time - ready_queue_ar[next].arrival_time;
-      ready_queue_ar[next]["waiting_time"] = ready_queue_ar[next].turnaround_time - ready_queue_ar[next].burst_time;
-
-      executed.push(ready_queue_ar[next]);
-      console.log(executed);
       
 
       if (burst_time == 0) { // if cpu free then take the next process
+
+        burst_times = [];
+        for (let i = 0; i < ready_queue_ar.length; i++) {
+          burst_times.push(ready_queue_ar[i].burst_time);
+        }
+
+        var next = burst_times.indexOf(Math.min.apply(null, burst_times));
+        console.log(next)
+
+        var current_process = ready_queue_ar[next];
+        console.log(current_process)
+
+        if (executed.length === 0) {
+          ready_queue_ar[next]["start"] = ready_queue_ar[next].arrival_time;
+        } else {
+          ready_queue_ar[next]["start"] = end;
+        }
+        
+        end += ready_queue_ar[next].burst_time;
+
+        ready_queue_ar[next]["completion_time"] = end;
+        ready_queue_ar[next]["turnaround_time"] = ready_queue_ar[next].completion_time - ready_queue_ar[next].arrival_time;
+        ready_queue_ar[next]["waiting_time"] = ready_queue_ar[next].turnaround_time - ready_queue_ar[next].burst_time;
+
+        executed.push(ready_queue_ar[next]);
+        for (let i = 0; i < executed.length; i++) {
+          console.log("executed " + executed[i].id);
+        }
+
         var current_process_el = $(`#${current_process.id}`)
 
         if (current_process_con[0].style.display === 'block'){
@@ -153,7 +158,7 @@ function simulate(processes, total_processing_time) {
         }
 
         current_process_el[0].style.position = 'absolute';
-        current_process_el.animate({left: '1090px', top: '50px'}, 'slow', function() {
+        current_process_el.animate({left: '522px', top: '50px'}, 'slow', function() {
           current_process_con[0].innerHTML = current_process.id;
           current_process_con[0].style.display = 'block';
           current_process_con[0].style.left = '1155px';
@@ -162,7 +167,7 @@ function simulate(processes, total_processing_time) {
 
           burst_time = parseInt(current_process.burst_time);
 
-          ready_queue_ar = ready_queue_ar.filter((item) => item[0] !== current_process.id);
+          ready_queue_ar = ready_queue_ar.filter((item) => item.id !== current_process.id);
           console.log(ready_queue_ar);
         });
 
@@ -190,7 +195,7 @@ function get_process(process_ar, current_second) {
   var all_f_processes = [];
   for (var i = 0; i < process_ar.length; i++) {
     var f_process = process_ar[i];
-    if (f_process.id == current_second) {
+    if (f_process.arrival_time == current_second) {
       all_f_processes.push(f_process);
     }
   }
@@ -231,11 +236,8 @@ function sort_queue(ready_queue_ar, ready_queue_show) {
 function cal_total_processing_time(process_ar) {
   var total_time = 0;
   for (var i = 0; i < process_ar.length; i++) {
-    var p = process_ar[i];
-    if(total_time < parseInt(p.arrival_time)){
-      total_time = parseInt(p.arrival_time);
-    }
-    total_time += parseInt(p.burst_time);
+    var _process = process_ar[i];
+      total_time += parseInt(_process.arrival_time) + parseInt(_process.burst_time)
   }
   return total_time;
 }
