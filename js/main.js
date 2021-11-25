@@ -57,63 +57,210 @@ function sjn_scheduling() {
     e.preventDefault();
 
     enter_btn.disabled = true;
-    var time = 0;
-    var end = 0;
-    var queue = [];
-    var executed = [];
-    var burst_times;
 
-    // beginning of implementation
-    while (executed.length != processes.length) {
+    var total_processing_time = cal_total_processing_time(processes);
+    simulate(processes, total_processing_time);
 
-      for (let i = 0; i < processes.length; i++) {
-        if (processes[i].arrival_time === time) {
-          queue.push(processes[i]);
-        }
-      }
-
-      burst_times = [];
-
-      for (let i = 0; i < queue.length; i++) {
-        burst_times.push(queue[i].burst_time);
-      }
-
-      var next = burst_times.indexOf(Math.min.apply(null, burst_times));
-
-      if (next === -1) {
-        continue;
-      }
-
-      if (time === end) {
-
-        if (executed.length === 0) {
-          queue[next]["start"] = queue[next].arrival_time;
-          console.log(queue[next].start)
-        } else {
-          queue[next]["start"] = end;
-        }
-        
-        end += queue[next].burst_time;
-
-        queue[next]["completion_time"] = end;
-        queue[next]["turnaround_time"] = queue[next].completion_time - queue[next].arrival_time;
-        queue[next]["waiting_time"] = queue[next].turnaround_time - queue[next].burst_time;
-
-        executed.push(queue[next]);
-        queue.splice(next, 1);
-        
-      }
-
-      time += 1;
-
-    } // end of implementation
-
-    generate_spn_chart(executed);
-    generate_spn_table(executed);
+    //generate_spn_chart(executed);
+    //generate_spn_table(executed);
 
   });
 
 }
+
+// simulates processing
+function simulate(processes, total_processing_time) {
+
+  var container = `
+      <div class="col-md-12">
+          <div class="card flex-md-row mb-4 box-shadow h-md-250 p-5">
+            <div class="card-body d-flex flex-column align-items-start">
+              <h4>Ready Queue</h4>
+              <ul class="list-group" id="ready_queue"></ul> <!--/.ready_queue-->
+            </div><!--/.card-body-->
+            <div class="card-img-right flex-auto d-none d-md-block">
+              <p class="fw-bold text-primary">CPU</p>
+              <svg id="cpu" xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" class="bi bi-cpu" viewBox="0 0 16 16">
+                <path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
+              </svg>
+              <h5 class="pt-5" id="time_counter">Time: <span class="text-danger">not-started</span></h5>
+            </div>
+
+            <div id="current-process-container" class="badge bg-primary" style="position: absolute; left: 1155px; top: 150px; display: none;">
+            </div>
+          </div><!--/.card-->
+        </div><!--/.col-->
+
+      </div>
+  `;
+
+  var div = document.getElementById('sjn-table-div');
+  div.innerHTML = container;
+
+  var time = 0;
+  var end = 0;
+  var ready_queue_ar = [];
+  var executed = [];
+  var burst_time = 0;
+  var current_process_con = $('#current-process-container');
+  var burst_times = [];
+
+  function do_processing() {
+    console.log('processing...')
+    var arrived_process = get_process(processes, time);
+    console.log(processes)
+
+    if (arrived_process.length != 0){
+      console.log('here 1')
+      ready_queue_ar.push(...arrived_process);
+    }
+
+    if (ready_queue_ar.length != 0) { // if ready queue has values then lets process
+      console.log('here 2')
+      sort_queue(ready_queue_ar, $("#ready_queue"))
+      console.log("ready queue: " + ready_queue_ar[0].id)
+
+      for (let i = 0; i < ready_queue_ar.length; i++) {
+        burst_times.push(ready_queue_ar[i].burst_time);
+      }
+
+      var next = burst_times.indexOf(Math.min.apply(null, burst_times));
+
+      var current_process = ready_queue_ar[next];
+
+      if (executed.length === 0) {
+        ready_queue_ar[next]["start"] = ready_queue_ar[next].arrival_time;
+        
+      } else {
+        ready_queue_ar[next]["start"] = end;
+      }
+      
+      end += ready_queue_ar[next].burst_time;
+
+      ready_queue_ar[next]["completion_time"] = end;
+      ready_queue_ar[next]["turnaround_time"] = ready_queue_ar[next].completion_time - ready_queue_ar[next].arrival_time;
+      ready_queue_ar[next]["waiting_time"] = ready_queue_ar[next].turnaround_time - ready_queue_ar[next].burst_time;
+
+      executed.push(ready_queue_ar[next]);
+      console.log(executed);
+      
+
+      if (burst_time == 0) { // if cpu free then take the next process
+        var current_process_el = $(`#${current_process.id}`)
+
+        if (current_process_con[0].style.display === 'block'){
+          remove_process_from_cpu(current_process_con);
+        }
+
+        current_process_el[0].style.position = 'absolute';
+        current_process_el.animate({left: '1090px', top: '50px'}, 'slow', function() {
+          current_process_con[0].innerHTML = current_process.id;
+          current_process_con[0].style.display = 'block';
+          current_process_con[0].style.left = '1155px';
+          current_process_con[0].style.top = '150px';
+
+
+          burst_time = parseInt(current_process.burst_time);
+
+          ready_queue_ar = ready_queue_ar.filter((item) => item[0] !== current_process.id);
+          console.log(ready_queue_ar);
+        });
+
+      }
+
+    }
+
+    if (time == total_processing_time + 2) { // end process
+      //alert('Processing finished');
+      generate_spn_chart(executed);
+      generate_spn_table(executed);
+    }
+
+    time += 1;
+    if (burst_time != 0) burst_time -= 1;
+    $("#time_counter")[0].innerHTML = "Time: " + time + "s";
+
+  }
+
+  setInterval(do_processing, 1500);
+} // ends simulation
+
+// returns process according to arrival time
+function get_process(process_ar, current_second) {
+  var all_f_processes = [];
+  for (var i = 0; i < process_ar.length; i++) {
+    var f_process = process_ar[i];
+    if (f_process.id == current_second) {
+      all_f_processes.push(f_process);
+    }
+  }
+  return all_f_processes; // returns array of processes with same arrival time
+}
+
+
+
+// animation to remove process from cpu
+function remove_process_from_cpu(current_process_con) {
+  current_process_con.animate({left: '2090px', top: '50px'}, 'slow', function() {
+  });
+
+}
+
+// sort queue by lowest arrival time
+function sort_queue(ready_queue_ar, ready_queue_show) {
+  ready_queue_ar.sort( function(a, b) {
+    return a.burst_time - b.burst_time;
+  });
+
+  ready_queue_show[0].innerHTML = "";
+
+  for (var i = 0; i < ready_queue_ar.length; i++) {
+    var arrived_process = ready_queue_ar[i];
+    var queue_entry = [
+        "<li class='list-group-item'>",
+          "<div class='badge bg-primary' style='position: relative;' id='" + arrived_process.id + "'>" ,
+            arrived_process.id,
+          "</div>",
+        "</li>"].join("\n");
+
+    ready_queue_show.append(queue_entry);
+  }
+}
+
+// caculates total processing time
+function cal_total_processing_time(process_ar) {
+  var total_time = 0;
+  for (var i = 0; i < process_ar.length; i++) {
+    var p = process_ar[i];
+    if(total_time < parseInt(p.arrival_time)){
+      total_time = parseInt(p.arrival_time);
+    }
+    total_time += parseInt(p.burst_time);
+  }
+  return total_time;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function generate_spn_chart(processes) {
 
@@ -212,11 +359,11 @@ function generate_spn_form() {
               <h3>Input Values</h3>
               <div class="form-group mt-2">
                   <label for="a-time">Arrival Time:</label><br>
-                  <input type="text" class="form-control" name="a-time" id="a-time" placeholder="Enter arrival time">
+                  <input type="number" class="form-control" name="a-time" id="a-time" placeholder="Enter arrival time">
               </div>
               <div class="form-group mt-2">
                   <label for="b-time">Burst Time:</label><br>
-                  <input type="text" class="form-control" name="b-time" id="b-time" placeholder="Enter burst time">
+                  <input type="number" class="form-control" name="b-time" id="b-time" placeholder="Enter burst time">
               </div>
               <div class="d-flex flex-row gap-2 mt-3">
                   <button type="submit" class="btn btn-primary" id="sjf-enter-btn">Enter values</button>
