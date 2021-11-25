@@ -205,7 +205,7 @@ function remove_process_from_cpu(current_process_con) {
 
 }
 
-// sort queue by lowest arrival time
+// sort queue by lowest burst time
 function sort_queue(ready_queue_ar, ready_queue_show) {
   ready_queue_ar.sort( function(a, b) {
     return a.burst_time - b.burst_time;
