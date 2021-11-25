@@ -28,6 +28,9 @@ function sjn_scheduling() {
 
     document.getElementById("sjn-form").reset();
 
+    const sjn_header = document.getElementById("sjn-header");
+    sjn_header.innerHTML = "Processes";
+
     var table = `
       <br>
       <table id="sjn-table" class="table table-bordered">
@@ -90,7 +93,8 @@ function simulate(processes, total_processing_time) {
 
       </div>
   `;
-
+  const sjn_header = document.getElementById("sjn-header");
+  sjn_header.innerHTML = "Simulation in progress...";
   var div = document.getElementById('sjn-table-div');
   div.innerHTML = container;
 
@@ -241,6 +245,9 @@ function cal_total_processing_time(process_ar) {
 
 function generate_spn_chart(processes) {
 
+  const sjn_header = document.getElementById("sjn-header");
+  sjn_header.innerHTML = "Results";
+
   var data = [];
   var process;
 
@@ -272,6 +279,9 @@ function generate_spn_chart(processes) {
     type: 'int'
   }
   };
+
+  const gantt_header = document.getElementById("gantt-header");
+  gantt_header.innerHTML = "GANTT CHART";
 
   var chart = new ApexCharts(document.querySelector("#sjn-chart"), options);
   chart.render();
@@ -333,7 +343,7 @@ function generate_spn_form() {
         <div class="d-flex flex-row container gap-4">
           <div id="sjn-input" class="container bg-light p-5 rounded-3 shadow-sm w-50 h-50">
             <form id="sjn-form" action="" method="post">
-              <h3>Input Values</h3>
+              <h3>Add process</h3>
               <div class="form-group mt-2">
                   <label for="a-time">Arrival Time:</label><br>
                   <input type="number" class="form-control" name="a-time" id="a-time" placeholder="Enter arrival time">
@@ -349,7 +359,8 @@ function generate_spn_form() {
             </form>
           </div>
           <div id="output" class="container bg-light p-5 rounded-3 shadow-sm">
-            <h3>Results</h3>
+            <h3 id="sjn-header">Results</h3>
+            <h6 id="gantt-header" class="text-center"></h6>
             <div id="sjn-chart"></div>
             <div id="sjn-table-div">The results will appear here.</div>
           </div>
