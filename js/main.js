@@ -159,8 +159,8 @@ function simulate(processes, total_processing_time) {
         current_process_el.animate({left: '522px', top: '50px'}, 'slow', function() {
           current_process_con[0].innerHTML = current_process.id;
           current_process_con[0].style.display = 'block';
-          current_process_con[0].style.left = '1155px';
-          current_process_con[0].style.top = '150px';
+          current_process_con[0].style.left = '587px';
+          current_process_con[0].style.top = '153px';
 
 
           burst_time = parseInt(current_process.burst_time) - 1;
@@ -346,11 +346,11 @@ function generate_spn_form() {
               <h3>Add process</h3>
               <div class="form-group mt-2">
                   <label for="a-time">Arrival Time:</label><br>
-                  <input type="number" class="form-control" name="a-time" id="a-time" placeholder="Enter arrival time">
+                  <input type="number" class="form-control" name="a-time" id="a-time" placeholder="Enter arrival time" required>
               </div>
               <div class="form-group mt-2">
                   <label for="b-time">Burst Time:</label><br>
-                  <input type="number" class="form-control" name="b-time" id="b-time" placeholder="Enter burst time">
+                  <input type="number" class="form-control" name="b-time" id="b-time" placeholder="Enter burst time" required>
               </div>
               <div class="d-flex flex-row gap-2 mt-3">
                   <button type="submit" class="btn btn-primary" id="sjf-enter-btn">Enter values</button>
