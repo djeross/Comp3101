@@ -354,7 +354,8 @@ function generate_spn_form() {
               </div>
               <div class="d-flex flex-row gap-2 mt-3">
                   <button type="submit" class="btn btn-primary" id="sjf-enter-btn">Enter values</button>
-                  <button type="submit" class="btn btn-primary" id="sjf-gantt-btn">Show Results</button>
+                  <button type="submit" class="btn btn-success px-4" id="sjf-gantt-btn">Simulate</button>
+                  <a href="javascript:;" onclick="generate_spn_form();sjn_scheduling();" class="btn btn-danger px-3">Reset</a>
               </div>
             </form>
           </div>
