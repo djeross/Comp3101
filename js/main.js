@@ -6,6 +6,7 @@ window.onload = function() {
 
 function main() {
   var body = $('body');
+  
   if(body.is('#fcfs')) {
     fcfs();
   } else if (body.is('#priority_scheduling')) {
