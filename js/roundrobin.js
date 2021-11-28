@@ -10,8 +10,7 @@ window.addEventListener('load',()=>{
     current_process_rem_time=99999999;
     var front;
     colors=["#c5c59a","#52b0ed","#9d6f7a","#ec28ad","#7893cc","#696941","#d8b286","#8fe306","#6769eb","#d1a966","#d4fda7","#4ebf85","#839ae1","#275bf7","#77f0ad","#515d5d","#febe82","#2d7a5d","#ef594c","#334789","#5dbf92","#34eca0","#4d1910","#7dfebb","#ec920b","#fde25a","#38749e","#62e8d7","#f43174","#e24b5a"];
-    
-    
+
 
     function addToQueue(process) {
         var service= process.querySelectorAll(".service_value")[0].innerHTML;
@@ -20,49 +19,60 @@ window.addEventListener('load',()=>{
         queue.insertAdjacentHTML( 'beforeend',createPorcess(arrival,service,id_value) );
     }
 
-    function checkReady(process){ //uses add to queue
-        var arrival= parseInt(process.querySelectorAll(".arrive_value")[0].innerHTML);
-        if (arrival<timer) {
-            addToQueue(process);
-        }
+    function getRndInteger() {
+        return Math.floor(Math.random() * (colors.length - 0) ) + 0;
     }
 
+    function checkReady(){ //uses add to queue
+        if (!(created_processes.length==0)){
+            var ps = created_processes[0];
+            var arrival= parseInt(ps.querySelectorAll(".arrive_value")[0].innerHTML);
+            console.log(`a: ${arrival}, t: ${timer}, ${arrival<=timer}`);
+            if (arrival<=timer) {
+                ps=created_processes.shift();
+                addToQueue(ps);
+                q=document.querySelectorAll(".square");
+                
+                var r_int=getRndInteger();
+                last=q[q.length-2];
+                console.log(last);
+                last.style.backgroundColor=colors[r_int];
+                colors.splice(r_int, 1);
+            }
+        }
+    }
 
     function getFrontOfQ(){
         var q=document.querySelector(".square");
         return q;
     }
 
-    
-
     document.querySelector("#start").addEventListener('click',startScheduling);
     function startScheduling(e){
         e.preventDefault();
         time_qauntum=document.querySelector("#timequantum").value;
        if((created_processes.length!=0) && (time_qauntum!=0 )){
-            /* document.querySelector("#start").disabled = true;
             process=created_processes.shift().querySelectorAll(".square")[0];
             addToQueue(process);
-            target_process=queue.querySelectorAll(".square")[0];
-            startAnimation(target_process);*/ 
-           
-            for (let index = 0; index < created_processes.length; index++) {
-                process=created_processes[index].querySelectorAll(".square")[0];
-                addToQueue(process);   
-            }
+            q=document.querySelectorAll(".square");
+            var r_int=getRndInteger();
+            last=q[q.length-1];
+            last.style.backgroundColor=colors[r_int];
+            colors.splice(r_int, 1);
+            timer=document.querySelector(".arrive_value").innerHTML;
+            document.querySelector("#timevalue").innerHTML=`${document.querySelector(".arrive_value").innerHTML}s`;
             setTimeout(startAnimation, 1000, getFrontOfQ());
-            //console.log(document.querySelectorAll(".square").length);
         }
-
     }
 
     function startAnimation(square,quantum){
-        //if (document.querySelectorAll(".square").length!=0){
+        checkReady();
+        if (!(parseInt(document.querySelector("#queue").querySelectorAll(".square").length)==0)){
             setTimeout(moveRight, 1500, square);
             setTimeout(processing,3000,square);
             setTimeout(moveDown, 5000, square);
-       // }
-       // return 1;
+        }
+        return 1;
          
     }
 
@@ -86,7 +96,14 @@ window.addEventListener('load',()=>{
             }else{
                 order_push(ps);
             }
+        }else{
+            Swal.fire(
+                'Warning',
+                'Service field and Arrival field cannot be empty.',
+                'warning'
+            )
         }
+        
 
     }
 
@@ -107,29 +124,28 @@ window.addEventListener('load',()=>{
   
     function createPorcess(Atime,Stime,id){
         var ps= `<div class="square" id="a${id}">
-        <div class="segment1">
-            <p>ID</p>
-            <p class="id_value">${id}</p>
-        </div>
-        <div class="segment2">
-            <p>AT</p>
-            <p class="arrive_value">${Atime}</p> 
-        </div>
-        <div class="segment3">
-            <p class="service_value">${Stime}</p>
-        </div>
+            <div class="segment1">
+                <p>ID</p>
+                <p class="id_value">${id}</p>
+            </div>
+            <div class="segment2">
+                <p>AT</p>
+                <p class="arrive_value">${Atime}</p> 
+            </div>
+            <div class="segment3">
+                <p class="service_value">${Stime}</p>
+            </div>
     </div>`
     return ps;
     }
 
     function moveRight(sqr,value){
+        checkReady()
         document.querySelector("#connect").appendChild(sqr);
         sqr.style.position="absolute";
-        /*sqr.animate({transform: `translateX(${280}px)`},{duration:1000,iterations: 1,fill: 'none' });*/
         var pos = 0;
         var id = setInterval(frame, 1);
         function frame() {
-            //console.log("moving RIGHT");
             if (pos == 280) {
                 clearInterval(id);
                 return sqr;
@@ -141,14 +157,14 @@ window.addEventListener('load',()=>{
     }
 
     function moveDown(sqr){
-        if (current_process_rem_time!=0){
+        checkReady();
+        if (current_process_rem_time>0){
             document.querySelector("#linedown").appendChild(sqr);
             sqr.style.left = 12+'px';
             sqr.style.position="absolute";
             var pos1 = 0;
             var id1 = setInterval(frame2, 1);
             function frame2() {
-                //console.log("moving DOWN");
                 if (pos1 == 220) {
                     clearInterval(id1);
                     return true;
@@ -157,17 +173,26 @@ window.addEventListener('load',()=>{
                     sqr.style.top = pos1 + 'px'; 
                 }
             }
-            setTimeout(moveLeft, 1000, sqr);
-            setTimeout(moveUP, 3500, sqr);
-            setTimeout(joinQueue, 6300, sqr);
-            setTimeout(startAnimation, 7000, getFrontOfQ());
+            setTimeout(moveLeft, 900, sqr);
+            setTimeout(moveUP, 2900, sqr);
+            setTimeout(joinQueue, 3900, sqr);
+            var front=getFrontOfQ();
+            if ((front==null) && created_processes.length!=0) {
+                p_=created_processes.shift();
+                p_Arrival=p_.querySelector(".arrive_value").innerHTML;
+                document.querySelector("#timevalue").innerHTML=`${timer+(p_Arrival-timer)}s`;
+                addToQueue(p_);
+                setTimeout(startAnimation, 1000, getFrontOfQ());
+            }else{
+                setTimeout(startAnimation, 4500, front);
+            }
+            
         }else{
             var id_value=sqr.querySelectorAll(".id_value")[0].innerHTML;
-            ///alert(`Process with id ${id_value}`);
             sqr.style.transition = '1.0s';
             sqr.style.opacity = 0;
             setTimeout(removeFromDom, 1200, sqr);
-            setTimeout(startAnimation, 2000, getFrontOfQ());
+            setTimeout(startAnimation, 1000, getFrontOfQ());
         }
     }
 
@@ -176,8 +201,10 @@ window.addEventListener('load',()=>{
         value=service_p.innerHTML;
         var time=time_qauntum;
         while (0!=time) {
+            checkReady()
             value--;
             timer++;
+            checkReady();
             service_p.innerHTML=value;
             time--; 
             if(parseInt(value)==0){
@@ -186,16 +213,16 @@ window.addEventListener('load',()=>{
                 break;
             }
         }
+        document.querySelector("#timevalue").innerHTML=`${timer}s`;
         current_process_rem_time=value;
     }
     
     function moveLeft(sqr){
+        checkReady();
         document.querySelector("#lineleft").appendChild(sqr);
         sqr.style.position="absolute";
         sqr.style.top = 10 +'px';
         sqr.style.left = 510 +'px';
-        
-        
         var pos3 = 0;
         var id3 = setInterval(frame3, 1);
         function frame3() {
@@ -213,11 +240,11 @@ window.addEventListener('load',()=>{
     }
 
     function moveUP(sqr){
+        checkReady();
         document.querySelector("#lineup").appendChild(sqr);
         sqr.style.position="absolute";
         sqr.style.top = 230 +'px';
-        sqr.style.left = 12 +'px';
-
+        sqr.style.left = 18 +'px';
         var pos3 = 0;
         var id3 = setInterval(frame3, 1);
         function frame3() {
@@ -234,22 +261,14 @@ window.addEventListener('load',()=>{
     }
 
     function joinQueue(sqr){ 
-        /*var service_value=sqr.querySelectorAll(".service_value")[0].innerHTML;
-        var arrival_value=sqr.querySelectorAll(".arrive_value")[0].innerHTML;
-        var id_value=sqr.querySelectorAll(".id_value")[0].innerHTML;
-        var Q = document.querySelector("#queue");
-        sqr.remove();
-        var new_ps=createPorcess(arrival_value,service_value,id_value)
-        Q.insertAdjacentHTML( 'beforeend', new_ps );*/
+        checkReady();
         var Q = document.querySelector("#queue");
         sqr.style.top =null;
         sqr.style.left = null;
         sqr.style.position = "static";
         Q.appendChild(sqr);
-
     }
     
-
     function finished(sqr){
         var service_p=sqr.querySelectorAll(".service_value")[0];
         if (parseInt(service_p)==0){
@@ -260,8 +279,5 @@ window.addEventListener('load',()=>{
 
     function removeFromDom(sqr) {
         sqr.remove();
-
     }
-
-
 });

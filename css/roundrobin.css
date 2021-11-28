@@ -35,9 +35,7 @@
     width: 400px;
     height: 122px;
     overflow-x: auto;
-    overflow-y: hidden;
-
-    
+    overflow-y: hidden;  
 }
 
 .square{
@@ -46,7 +44,6 @@
     
 }
 .square {
-    background-color: red;
     border:4px black solid;
 }
 .square > p{
@@ -110,7 +107,7 @@
 #lefttime{
     display: flex;
     flex-direction: column;
-    gap: 83px;
+    gap: 71px;
 }
 #time{
     display: flex;
@@ -121,7 +118,8 @@
 #time>p{
     margin-top: 85px;
     justify-content: center;
-    border: 1px red solid;
+    border: 2px red solid;
+    padding: 5px;
 }
 
 #lineleft{
@@ -133,10 +131,12 @@
 
 }
 #lineup{
+    display: flex;
     background-color: deeppink;
     width: 90px;
     height: 300px;
     position: relative;
+    justify-content: center;
 }
 
 form{
