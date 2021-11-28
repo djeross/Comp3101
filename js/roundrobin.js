@@ -9,7 +9,7 @@ window.addEventListener('load',()=>{
     moveready=0;
     current_process_rem_time=99999999;
     var front;
-    colors=["#c5c59a","#52b0ed","#9d6f7a","#ec28ad","#7893cc","#696941","#d8b286","#8fe306","#6769eb","#d1a966","#d4fda7","#4ebf85","#839ae1","#275bf7","#77f0ad","#515d5d","#febe82","#2d7a5d","#ef594c","#334789","#5dbf92","#34eca0","#4d1910","#7dfebb",'#ec920b","#fde25a","#38749e","#62e8d7","#f43174","#e24b5a"];
+    colors=["#c5c59a","#52b0ed","#9d6f7a","#ec28ad","#7893cc","#696941","#d8b286","#8fe306","#6769eb","#d1a966","#d4fda7","#4ebf85","#839ae1","#275bf7","#77f0ad","#515d5d","#febe82","#2d7a5d","#ef594c","#334789","#5dbf92","#34eca0","#4d1910","#7dfebb","#ec920b","#fde25a","#38749e","#62e8d7","#f43174","#e24b5a"];
     
     
 
