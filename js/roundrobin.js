@@ -96,15 +96,7 @@ window.addEventListener('load',()=>{
             }else{
                 order_push(ps);
             }
-        }else{
-            Swal.fire(
-                'Warning',
-                'Service field and Arrival field cannot be empty.',
-                'warning'
-            )
         }
-        
-
     }
 
     function order_push(sqr){
@@ -173,9 +165,9 @@ window.addEventListener('load',()=>{
                     sqr.style.top = pos1 + 'px'; 
                 }
             }
-            setTimeout(moveLeft, 900, sqr);
-            setTimeout(moveUP, 2900, sqr);
-            setTimeout(joinQueue, 3900, sqr);
+            setTimeout(moveLeft, 1000, sqr);
+            setTimeout(moveUP, 3300, sqr);
+            setTimeout(joinQueue, 4300, sqr);
             var front=getFrontOfQ();
             if ((front==null) && created_processes.length!=0) {
                 p_=created_processes.shift();
