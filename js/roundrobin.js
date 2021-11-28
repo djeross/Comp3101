@@ -8,9 +8,10 @@ window.addEventListener('load',()=>{
     var timer=0;
     moveready=0;
     current_process_rem_time=99999999;
+    var front;
+    colors=["#c5c59a","#52b0ed","#9d6f7a","#ec28ad","#7893cc","#696941","#d8b286","#8fe306","#6769eb","#d1a966","#d4fda7","#4ebf85","#839ae1","#275bf7","#77f0ad","#515d5d","#febe82","#2d7a5d","#ef594c","#334789","#5dbf92","#34eca0","#4d1910","#7dfebb",'#ec920b","#fde25a","#38749e","#62e8d7","#f43174","#e24b5a"];
     
-    document.querySelector("#start").addEventListener('click',startScheduling);
-
+    
 
     function addToQueue(process) {
         var service= process.querySelectorAll(".service_value")[0].innerHTML;
@@ -19,73 +20,51 @@ window.addEventListener('load',()=>{
         queue.insertAdjacentHTML( 'beforeend',createPorcess(arrival,service,id_value) );
     }
 
-    function checkReady(process){
+    function checkReady(process){ //uses add to queue
         var arrival= parseInt(process.querySelectorAll(".arrive_value")[0].innerHTML);
         if (arrival<timer) {
             addToQueue(process);
         }
-
     }
 
-    function getFront(){
-        return created_processes[0];
+
+    function getFrontOfQ(){
+        var q=document.querySelector(".square");
+        return q;
     }
 
+    
+
+    document.querySelector("#start").addEventListener('click',startScheduling);
     function startScheduling(e){
         e.preventDefault();
         time_qauntum=document.querySelector("#timequantum").value;
-        if((created_processes.length!=0) && (time_qauntum!=0 )){
-            document.querySelector("#start").disabled = true;
-            //console.log(created_processes[0].querySelectorAll(".square")[0]);
+       if((created_processes.length!=0) && (time_qauntum!=0 )){
+            /* document.querySelector("#start").disabled = true;
             process=created_processes.shift().querySelectorAll(".square")[0];
             addToQueue(process);
             target_process=queue.querySelectorAll(".square")[0];
-            startAnimation(target_process);
+            startAnimation(target_process);*/ 
+           
+            for (let index = 0; index < created_processes.length; index++) {
+                process=created_processes[index].querySelectorAll(".square")[0];
+                addToQueue(process);   
+            }
+            setTimeout(startAnimation, 1000, getFrontOfQ());
+            //console.log(document.querySelectorAll(".square").length);
         }
+
     }
-
-
-
-
 
     function startAnimation(square,quantum){
-        setTimeout(moveRight, 500, square);
-        var value=setTimeout(processing,2500,square);
-        setTimeout(moveDown, 3500, square,value); 
+        //if (document.querySelectorAll(".square").length!=0){
+            setTimeout(moveRight, 1500, square);
+            setTimeout(processing,3000,square);
+            setTimeout(moveDown, 5000, square);
+       // }
+       // return 1;
+         
     }
-
-
-    document.querySelector("#add").addEventListener('click',addToCreated);
-    function addToCreated(e){
-        e.preventDefault();
-        var Q = document.querySelector("#queue");
-        var service=document.querySelector("#servicetime").value;
-        var arrival=document.querySelector("#arrivaltime").value;
-        if (!(service=="") && !(arrival=="")) {
-            var pcount=document.querySelector("#processcount");
-            processcounter=parseInt(pcount.innerHTML)+1;
-            pcount.innerHTML= processcounter;
-            number_Queue.push(processcounter);
-            var new_ps_string=createPorcess(arrival,service,processcounter);
-            var ps = new DOMParser().parseFromString(new_ps_string, "text/xml");
-            if(created_processes.length==0){
-                created_processes.push(ps);
-            }else{
-                order_push(ps);
-            }
-        }
-        //var s=document.querySelectorAll(".square");
-        //var x =s[s.length-2];
-        /*var complete= moveRight(x);
-        setTimeout(moveDown, 2000, x);
-        setTimeout(moveLeft, 4000, x);
-        setTimeout(moveUP, 7000, x);
-        setTimeout(joinQueue, 8500, x);*/
-    }
-
-
-
-
 
     document.querySelector("#add").addEventListener('click',addToCreated);
     function addToCreated(e){
@@ -107,18 +86,8 @@ window.addEventListener('load',()=>{
             }else{
                 order_push(ps);
             }
-
-           // for(let i=0;i<created_processes.length;i++){
-            //    console.log(created_processes[i]);
-            //} 
         }
-        //var s=document.querySelectorAll(".square");
-        //var x =s[s.length-2];
-        /*var complete= moveRight(x);
-        setTimeout(moveDown, 2000, x);
-        setTimeout(moveLeft, 4000, x);
-        setTimeout(moveUP, 7000, x);
-        setTimeout(joinQueue, 8500, x);*/
+
     }
 
     function order_push(sqr){
@@ -134,8 +103,6 @@ window.addEventListener('load',()=>{
         if(sizeb4==created_processes.length) {
             created_processes.push(sqr);
         }
-
-        //console.log(created_processes.length);
     }
   
     function createPorcess(Atime,Stime,id){
@@ -162,7 +129,7 @@ window.addEventListener('load',()=>{
         var pos = 0;
         var id = setInterval(frame, 1);
         function frame() {
-            console.log("moving RIGHT");
+            //console.log("moving RIGHT");
             if (pos == 280) {
                 clearInterval(id);
                 return sqr;
@@ -173,16 +140,15 @@ window.addEventListener('load',()=>{
         }
     }
 
-    function moveDown(sqr,value){
-        alert(value);
-        if (value==0){
+    function moveDown(sqr){
+        if (current_process_rem_time!=0){
             document.querySelector("#linedown").appendChild(sqr);
             sqr.style.left = 12+'px';
             sqr.style.position="absolute";
             var pos1 = 0;
             var id1 = setInterval(frame2, 1);
             function frame2() {
-                console.log("moving DOWN");
+                //console.log("moving DOWN");
                 if (pos1 == 220) {
                     clearInterval(id1);
                     return true;
@@ -191,11 +157,17 @@ window.addEventListener('load',()=>{
                     sqr.style.top = pos1 + 'px'; 
                 }
             }
-            setTimeout(moveLeft, 5000, square);
-            setTimeout(moveUP, 8000, square);
-            setTimeout(joinQueue, 9500, square);
+            setTimeout(moveLeft, 1000, sqr);
+            setTimeout(moveUP, 3500, sqr);
+            setTimeout(joinQueue, 6300, sqr);
+            setTimeout(startAnimation, 7000, getFrontOfQ());
         }else{
-            fade(sqr);
+            var id_value=sqr.querySelectorAll(".id_value")[0].innerHTML;
+            ///alert(`Process with id ${id_value}`);
+            sqr.style.transition = '1.0s';
+            sqr.style.opacity = 0;
+            setTimeout(removeFromDom, 1200, sqr);
+            setTimeout(startAnimation, 2000, getFrontOfQ());
         }
     }
 
@@ -203,13 +175,15 @@ window.addEventListener('load',()=>{
         var service_p=sqr.querySelectorAll(".service_value")[0];
         value=service_p.innerHTML;
         var time=time_qauntum;
-        while (0<time) {
+        while (0!=time) {
             value--;
+            timer++;
             service_p.innerHTML=value;
             time--; 
             if(parseInt(value)==0){
                 sqr.style.backgroundColor = 'green' ;
                 current_process_rem_time=0;
+                break;
             }
         }
         current_process_rem_time=value;
@@ -225,7 +199,7 @@ window.addEventListener('load',()=>{
         var pos3 = 0;
         var id3 = setInterval(frame3, 1);
         function frame3() {
-            console.log("moving LEFT");
+            //console.log("moving LEFT");
             if (pos3 == 510) {
                 clearInterval(id3);
                 return true;
@@ -247,7 +221,6 @@ window.addEventListener('load',()=>{
         var pos3 = 0;
         var id3 = setInterval(frame3, 1);
         function frame3() {
-            console.log("moving LEFT");
             if (pos3 == 230) {
                 clearInterval(id3);
                 return true;
@@ -255,22 +228,25 @@ window.addEventListener('load',()=>{
                 pos3++; 
                 var sub = 230-pos3;
                 sqr.style.top =  sub + 'px'; 
-
             }
         }
 
     }
 
     function joinQueue(sqr){ 
-        var service_value=sqr.querySelectorAll(".service_value")[0].innerHTML;
+        /*var service_value=sqr.querySelectorAll(".service_value")[0].innerHTML;
         var arrival_value=sqr.querySelectorAll(".arrive_value")[0].innerHTML;
         var id_value=sqr.querySelectorAll(".id_value")[0].innerHTML;
         var Q = document.querySelector("#queue");
         sqr.remove();
         var new_ps=createPorcess(arrival_value,service_value,id_value)
-        Q.insertAdjacentHTML( 'beforeend', new_ps );
+        Q.insertAdjacentHTML( 'beforeend', new_ps );*/
+        var Q = document.querySelector("#queue");
+        sqr.style.top =null;
+        sqr.style.left = null;
+        sqr.style.position = "static";
+        Q.appendChild(sqr);
 
-        
     }
     
 
@@ -282,9 +258,7 @@ window.addEventListener('load',()=>{
         return false;
     }
 
-    function fade(sqr) {
-        sqr.style.transition = '0.8s';
-        sqr.style.opacity = 0;
+    function removeFromDom(sqr) {
         sqr.remove();
 
     }
