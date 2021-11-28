@@ -36,94 +36,99 @@
       </a>
 
       <ul class="nav nav-pills">
-        <li class="nav-item"><a href="#" class="nav-link">First Come First Served</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Shortest Job Next</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Round Robin</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Priority-Queue</a></li>
+        <li class="nav-item"><a href="./fcfs.html" class="nav-link">First Come First Served</a></li>
+        <li class="nav-item"><a href="javascript:;" onclick="generate_spn_form();sjn_scheduling();" class="nav-link">Shortest Job Next</a></li>
+        <li class="nav-item"><a href="./roundrobin.html" class="nav-link active">Round Robin</a></li>
+        <li class="nav-item"><a href="./priority_scheduling.html" class="nav-link">Priority-Queue</a></li>
       </ul>
     </header>
-        <div id="robin">
-            <div id="control">
-                <div>
-                    <form action="#">
-                        <div>
-                            <div class="field">
-                                <div id="addp">
-                                    <div>
-                                        <label for="Arrival">Add Arrival Time</label>
-                                        <input type="number" id="arrivaltime" name="Arrival">
-                                    </div>
-                                    <div>
-                                        <label for="Service">Add Service Time</label>
-                                        <input type="number" id="servicetime" name="Service" >
-                                    </div>
+        <div class="main">
+            <div class="description">
+                <h1 class="fw-bold">Round Robin (Non-Preemptive)</h1>
+            </div><!--/.description-->
 
+            <div id="robin">
+                <div id="control">
+                    <div>
+                        <form action="#">
+                            <div>
+                                <div class="field">
+                                    <div id="addp">
+                                        <div>
+                                            <label for="Arrival">Add Arrival Time</label>
+                                            <input type="number" id="arrivaltime" name="Arrival">
+                                        </div>
+                                        <div>
+                                            <label for="Service">Add Service Time</label>
+                                            <input type="number" id="servicetime" name="Service" >
+                                        </div>
+
+                                    </div>
+                                    <input type="submit" value="Create Process" id="add">
                                 </div>
-                                <input type="submit" value="Create Process" id="add">
+                                <div >
+                                    <P>Number of Processes : <strong><span id="processcount">0</span></strong></P>
+                                    
+                                </div>
                             </div>
-                            <div >
-                                <P>Number of Processes : <strong><span id="processcount">0</span></strong></P>
+                        </form>
+                        <hr class="rounded">
+                        <form action="#">
+                           
+                            <div>
+                                <div class="field">
+                                    <div id="addq">
+                                        <label for="Quantum">Set Time Quantum</label>
+                                        <input type="number" id="timequantum" name="Quantum" required="required">
+                                    </div>
+                                    <input type="submit" value="Start Simulation" id="start">
+                                    </div>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+                <div id="contentarea">
+                    <div id="level1">
+
+                        <div id="queueName">
+                            <div>QUEUE</div>
+                            <div id="queue">
+                                
+                            </div>  
+                        </div>
+
+                        <div id="connect">
+
+                        </div> 
+
+                        <div id="processName">
+                            <div>PROCESSOR</div>
+                            <div id="processor">
                                 
                             </div>
                         </div>
-                    </form>
-                    <hr class="rounded">
-                    <form action="#">
-                       
-                        <div>
-                            <div class="field">
-                                <div id="addq">
-                                    <label for="Quantum">Set Time Quantum</label>
-                                    <input type="number" id="timequantum" name="Quantum" required="required">
-                                </div>
-                                <input type="submit" value="Start Simulation" id="start">
-                                </div>
+                    </div>
+
+                    <div id="level2">
+                        <div id="lineup">
                         </div>
-                    </form>
-                    
+                        
+                        <div id="lefttime">
+                            <div id="time">
+                                <p id="timevalue"> <span>0</span>s </p>
+                            </div>
+                            <div id="lineleft">
+                            </div>
+                        </div>
+
+                        <div id="linedown">
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <div id="contentarea">
-                <div id="level1">
-
-                    <div id="queueName">
-                        <div>QUEUE</div>
-                        <div id="queue">
-                            
-                        </div>  
-                    </div>
-
-                    <div id="connect">
-
-                    </div> 
-
-                    <div id="processName">
-                        <div>PROCESSOR</div>
-                        <div id="processor">
-                            
-                        </div>
-                    </div>
-                </div>
-
-                <div id="level2">
-                    <div id="lineup">
-                    </div>
-                    
-                    <div id="lefttime">
-                        <div id="time">
-                            <p id="timevalue"> <span>0</span>s </p>
-                        </div>
-                        <div id="lineleft">
-                        </div>
-                    </div>
-
-                    <div id="linedown">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
+        </div><!--/.main-->
     
     <footer class="pt-5 my-5 text-muted border-top footer">
       Created by the team · © 2021

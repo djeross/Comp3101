@@ -644,7 +644,7 @@ function generate_spn_form() {
   var div = document.getElementsByClassName("main")[0];
 
   div.innerHTML = `
-        <h1>Shortest Job Next Scheduling (Non-Preemptive)</h1>
+        <h1 class="fw-bold">Shortest Job Next Scheduling (Non-Preemptive)</h1>
         <div class="d-flex flex-row container gap-4">
           <div id="sjn-input" class="container bg-light p-5 rounded-3 shadow-sm w-50 h-50">
             <form id="sjn-form" action="" method="post">
