@@ -8,3 +8,6 @@ Built as a final project for COMP3101 (Operating Systems)
  - Nazhon Robinson
  - Rodje Ross
  - Dahalia Howell
+
+Live site:
+https://processsimulator-yxtxx.ondigitalocean.app/

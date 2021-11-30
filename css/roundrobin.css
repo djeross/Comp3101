@@ -1,0 +1,231 @@
+#robin{
+    width: fit-content;
+    height: fit-content;
+    border: 2px solid black;
+    padding: 30px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    
+}
+
+#control{
+    display: flex;
+    margin-top: 30px;
+    width: 300px;
+    height: 400px;
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color: rgb(194, 194, 194);
+    justify-content: center;
+}
+#contentarea{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+#queue{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    border:1px black solid;
+    padding:30px;
+    width: 400px;
+    height: 122px;
+    overflow-x: auto;
+    overflow-y: hidden;  
+}
+
+.square{
+    width: 65px;
+    height: 65px;
+    
+}
+.square {
+    border:4px black solid;
+}
+.square > p{
+    border:1px black solid;   
+}
+
+.segment1{
+    border-bottom: 2px black solid;
+    height: 20px;
+}
+.segment2{
+    height: 20px;
+}
+.segment3{
+    border-top: 2px black solid;
+    height: 20px;
+}
+
+
+#level1{
+    display: flex;
+    flex-direction: row;
+}
+#connect{
+    display: flex;
+    width: 250px;
+    height: 90px;
+    background-color: gold;
+    align-self: center;
+    margin-top: 24px;
+    align-items: center;
+    position: relative;
+}
+
+#processor{
+    display: flex;
+    border:1px black solid;
+    padding:30px;
+    width: 122px;
+    height: 122px;
+    background-color: hotpink;
+    justify-content: center;
+}
+
+
+ 
+#level2{
+    display: flex;
+    flex-direction: row;
+}
+
+#linedown{
+    display: flex;
+    background-color:darkred;
+    width: 90px;
+    height: 300px;
+    position: relative;
+    justify-content: center;
+
+}
+#lefttime{
+    display: flex;
+    flex-direction: column;
+    gap: 71px;
+}
+#time{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    
+}
+#time>p{
+    margin-top: 85px;
+    justify-content: center;
+    border: 2px red solid;
+    padding: 5px;
+}
+
+#lineleft{
+    background-color:rgb(53, 0, 139);
+    width: 577px;
+    height: 90px;
+    position: relative;
+    display: flex;
+
+}
+#lineup{
+    display: flex;
+    background-color: deeppink;
+    width: 90px;
+    height: 300px;
+    position: relative;
+    justify-content: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+input{
+    width:180px;
+    height: 35px;
+    border-radius: 6px;
+}
+
+#start{
+    width: fit-content;
+    height: 30px;
+}
+#add{
+    width: fit-content;
+    height: 30px;
+}
+#addp{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#addq{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.field{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+#control div{
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+}
+
+hr.rounded {
+    border-top: 8px solid #bbb;
+    border-radius: 5px;
+}
+
+.segment1>p,.segment2>p .segment3>p {
+    border:1px black solid;
+    width:50%;
+    height:inherit;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+.segment2>p {
+    border:1px black solid;
+    width:50%;
+    height:inherit;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+.segment3>p {
+    width:100%;
+    height:inherit;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    align-content: center;
+    margin-top: -4px;
+}
+
+
+.segment1,.segment2, .segment3 {
+    display: flex;
+    flex-direction: row;
+}
+
+/*animation*/
+.moveright{
+    transition: all 100s linear;
+    transform: translateX(280px);
+}

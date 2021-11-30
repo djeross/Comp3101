@@ -27,7 +27,7 @@ window.addEventListener('load',()=>{
         if (!(created_processes.length==0)){
             var ps = created_processes[0];
             var arrival= parseInt(ps.querySelectorAll(".arrive_value")[0].innerHTML);
-        
+            console.log(`a: ${arrival}, t: ${timer}, ${arrival<=timer}`);
             if (arrival<=timer) {
                 ps=created_processes.shift();
                 addToQueue(ps);
@@ -35,7 +35,7 @@ window.addEventListener('load',()=>{
                 
                 var r_int=getRndInteger();
                 last=q[q.length-2];
-                //console.log(last);
+                console.log(last);
                 last.style.backgroundColor=colors[r_int];
                 colors.splice(r_int, 1);
             }
