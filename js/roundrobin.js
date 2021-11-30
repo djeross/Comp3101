@@ -66,13 +66,14 @@ window.addEventListener('load',()=>{
     }
 
     function startAnimation(square,quantum){
+        //console.log(created_processes.length);
         checkReady();
-        if (!(parseInt(document.querySelector("#queue").querySelectorAll(".square").length)==0)){
+        //if (!(parseInt(document.querySelector("#queue").querySelectorAll(".square").length)==0) && created_processes.length!=0){
             setTimeout(moveRight, 1500, square);
             setTimeout(processing,3000,square);
             setTimeout(moveDown, 5000, square);
-        }
-        return 1;
+        //}
+        //return 1;
          
     }
 
@@ -169,6 +170,7 @@ window.addEventListener('load',()=>{
             setTimeout(moveUP, 3300, sqr);
             setTimeout(joinQueue, 4300, sqr);
             var front=getFrontOfQ();
+            console.log(front);
             if ((front==null) && created_processes.length!=0) {
                 p_=created_processes.shift();
                 p_Arrival=p_.querySelector(".arrive_value").innerHTML;
